@@ -1,4 +1,6 @@
 package demo
+import java.util
+import collection.JavaConverters._
 
 trait CompanionlessTrait {
   def foo: String
@@ -78,5 +80,12 @@ object ImplicitClasses {
    */
   implicit class RichInt(val i: Int) extends AnyVal {
     def times(f: => Unit) = (1 to i).foreach(_ => f)
+  }
+}
+
+object CallingDemo {
+  def printList(l : java.util.List[java.lang.String]) {
+    val scalaList : List[String] = l.asScala.toList
+    println("list = " + scalaList.toString())
   }
 }

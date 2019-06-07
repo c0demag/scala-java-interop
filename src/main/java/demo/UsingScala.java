@@ -1,9 +1,10 @@
 package demo;
 
-import com.twitter.util.Function;
 import scala.collection.JavaConversions;
 import scala.collection.Seq;
 import scala.collection.Traversable;
+
+import java.util.ArrayList;
 
 public class UsingScala {
   /**
@@ -61,21 +62,6 @@ public class UsingScala {
   /**
    * Ugh, implicits. In Scala this would be `strings.flatten`.
    */
-  public static scala.collection.GenTraversableOnce<String> flattenSeq(Seq<Seq<String>> strings) {
-    return strings.<String>flatten(
-      scala.Predef.<Seq<String>>conforms().andThen(
-        new Function<
-          Seq<String>,
-          scala.collection.GenTraversableOnce<String>
-        >() {
-          public scala.collection.GenTraversableOnce<String> apply(Seq<String> seq) {
-            return seq;
-          }
-        }
-      )
-    );
-  }
-
   /**
    * Java can't tell that `String => List[String]` is a subtype of
    * `String => Seq[String]`.
@@ -117,19 +103,6 @@ public class UsingScala {
   }*/
 
   /**
-   * Instead we have to use `Object` for the primitive.
-   */
-  public static Traversable<String> moreThanThreeChars(Seq<String> xs) {
-    return xs.filter(
-      new com.twitter.util.Function<String, Object>() {
-        public Object apply(String x) {
-          return x.length() > 3;
-        }
-      }
-    );
-  }
-
-  /**
    * Converting from Scala to Java.
    */
   java.util.List<String> fromScalaList(Seq<String> strings) {
@@ -144,14 +117,17 @@ public class UsingScala {
   }
 
   /**
-   * Converting from Java to a Scala immutable collection.
-   */
-  Seq<String> toScalaImmutableSeq(java.util.List<String> strings) {
-    return com.twitter.util.javainterop.Scala.asImmutableSeq(strings);
-  }
-
-  /**
    * Yay! Runtime exceptions!
    */
   public static ImplicitClasses.RichInt rich4() { return new ImplicitClasses.RichInt(4); }
+
+  public static void main(String[] args) {
+      ArrayList<String> l = new ArrayList<String>();
+      l.add("one");
+      l.add("two");
+      l.add("three");
+
+      System.out.println("Hello, world!\n");
+      CallingDemo.printList(l);
+  }
 }
